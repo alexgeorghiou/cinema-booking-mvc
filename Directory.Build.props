@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>7.3</LangVersion>
+    <Authors>Alex Georghiou</Authors>
+    <Copyright>Copyright (c) 2026 Alex Georghiou</Copyright>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>

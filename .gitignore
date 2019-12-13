@@ -1,0 +1,27 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+.vs/
+*.rsuser
+
+# NuGet (packages.config restore folder)
+packages/
+!**/packages/build/
+*.nupkg
+
+# Test results
+TestResults/
+*.trx
+coverage*.xml
+
+# LocalDB / App_Data
+src/Cinema.Web/App_Data/*.mdf
+src/Cinema.Web/App_Data/*.ldf
+
+# Publish
+publish/
+*.pubxml.user
