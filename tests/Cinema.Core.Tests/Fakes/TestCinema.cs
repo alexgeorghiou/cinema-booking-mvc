@@ -48,6 +48,11 @@ namespace Cinema.Core.Tests.Fakes
         public SeatMapService SeatMaps() =>
             new SeatMapService(Store, Store, Store, Pricing, Clock);
 
+        public IBookingReferenceGenerator References { get; set; } = new BookingReferenceGenerator();
+
+        public BookingService Bookings() =>
+            new BookingService(Store, Store, Store, Store, Pricing, References, Clock, Options);
+
         public int Seat(string label) => Hall.Seats.Single(s => s.Label == label).Id;
 
         public int[] Seats(params string[] labels) => labels.Select(Seat).ToArray();
