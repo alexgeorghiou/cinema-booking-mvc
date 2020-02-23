@@ -81,6 +81,7 @@ namespace Cinema.Core.Tests.Fakes
             new HashSet<int>(Bookings
                 .Where(b => b.ScreeningId == screeningId && b.Status != BookingStatus.Cancelled)
                 .SelectMany(b => b.Seats)
+                .Where(s => s.IsActive)
                 .Select(s => s.SeatId));
 
         public IReadOnlyList<Booking> ListForUser(string userId) => Bookings.Where(b => b.UserId == userId).ToList();

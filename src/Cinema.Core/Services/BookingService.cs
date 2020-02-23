@@ -177,6 +177,11 @@ namespace Cinema.Core.Services
 
             booking.Status = BookingStatus.Cancelled;
             booking.CancelledUtc = _clock.UtcNow;
+            foreach (var seat in booking.Seats)
+            {
+                seat.IsActive = false;
+            }
+
             screening.TouchSeats();
             _unitOfWork.SaveChanges();
             return booking;

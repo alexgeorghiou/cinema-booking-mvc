@@ -51,6 +51,11 @@ namespace Cinema.Core.Domain
     /// </summary>
     public class BookedSeat
     {
+        public BookedSeat()
+        {
+            IsActive = true;
+        }
+
         public int Id { get; set; }
 
         public int BookingId { get; set; }
@@ -64,5 +69,11 @@ namespace Cinema.Core.Domain
         public virtual Seat Seat { get; set; }
 
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// False once the booking is cancelled. The unique index is filtered on this flag so a
+        /// cancelled seat can be sold again while the booking keeps its history.
+        /// </summary>
+        public bool IsActive { get; set; }
     }
 }
