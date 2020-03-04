@@ -7,7 +7,8 @@ namespace Cinema.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new DomainExceptionFilter());
+            // Exception filters run highest Order first, so domain errors are translated before HandleError sees them.
+            filters.Add(new DomainExceptionFilter(), 1);
             filters.Add(new HandleErrorAttribute());
         }
     }
