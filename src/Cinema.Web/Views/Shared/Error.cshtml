@@ -1,0 +1,9 @@
+@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Something went wrong";
+}
+<div class="jumbotron">
+    <h1>Intermission</h1>
+    <p>Something went wrong on our side. Please try again in a moment.</p>
+    <p><a class="btn btn-primary" href="@Url.Action("Index", "Home", new { area = "" })">Back to listings</a></p>
+</div>
