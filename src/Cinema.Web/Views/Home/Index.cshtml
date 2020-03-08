@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3>
-                    <span class="rating" title="Age rating">@AgeRatingLabel(listing.Movie.Rating)</span>
+                    <span class="rating" title="Age rating">@DisplayLabels.Rating(listing.Movie.Rating)</span>
                     @listing.Movie.Title
                     <small>@listing.Movie.DurationMinutes min</small>
                 </h3>
@@ -42,24 +42,4 @@
             </div>
         </div>
     </div>
-}
-
-@helper AgeRatingLabel(AgeRating rating)
-{
-    switch (rating)
-    {
-        case AgeRating.Twelve: @:12A
-            break;
-        case AgeRating.Fifteen: @:15
-            break;
-        case AgeRating.Eighteen: @:18
-            break;
-        default: @rating
-            break;
-    }
-}
-
-@helper FormatLabel(ScreeningFormat format)
-{
-    @(format == ScreeningFormat.ThreeD ? "3D" : format == ScreeningFormat.Imax ? "IMAX" : "2D")
 }
