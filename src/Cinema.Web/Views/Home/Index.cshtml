@@ -36,7 +36,7 @@
                 {
                     <a class="btn btn-default showtime" href="@Url.Action("Details", "Screenings", new { id = s.Id })">
                         @VenueTime.ToLocal(s.StartsAtUtc).ToString("HH:mm")
-                        <small>@s.Hall.Name @(s.Format == ScreeningFormat.TwoD ? "" : "· " + FormatLabel(s.Format))</small>
+                        <small>@s.Hall.Name @(s.Format == ScreeningFormat.TwoD ? "" : "· " + DisplayLabels.Format(s.Format))</small>
                     </a>
                 }
             </div>
