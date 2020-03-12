@@ -1,0 +1,78 @@
+@model Screening
+@{
+    var local = VenueTime.ToLocal(Model.StartsAtUtc);
+}
+
+<ol class="breadcrumb">
+    <li><a href="@Url.Action("Index", "Home", new { date = local.ToString("yyyy-MM-dd") })">What's on</a></li>
+    <li class="active">@Model.Movie.Title</li>
+</ol>
+
+<div class="page-header">
+    <h1>
+        @Model.Movie.Title
+        <small>@local.ToString("dddd d MMMM, HH:mm") &middot; @Model.Hall.Name &middot; @DisplayLabels.Format(Model.Format)</small>
+    </h1>
+</div>
+
+@Html.AntiForgeryToken()
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="screen-label">SCREEN</div>
+        <div class="screen"></div>
+        <div id="seat-map" class="seat-map" aria-live="polite">
+            <p class="text-center text-muted">Loading seats&hellip;</p>
+        </div>
+        <ul class="list-unstyled seat-legend text-center">
+            <li><span class="seat seat-available"></span> Standard</li>
+            <li><span class="seat seat-available seat-premium"></span> Premium</li>
+            <li><span class="seat seat-available seat-accessible"></span> Wheelchair space</li>
+            <li><span class="seat seat-selected"></span> Your selection</li>
+            <li><span class="seat seat-held"></span> Being booked</li>
+            <li><span class="seat seat-sold"></span> Sold</li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default summary-panel">
+            <div class="panel-heading"><strong>Your seats</strong></div>
+            <div class="panel-body">
+                <p id="selection-empty" class="text-muted">Pick up to @ViewBag.MaxSeats seats on the plan.</p>
+                <ul id="selection-list" class="list-unstyled"></ul>
+                <p class="lead">Total <strong id="selection-total" class="pull-right">&pound;0.00</strong></p>
+                <div id="seat-error" class="alert alert-danger hidden" role="alert"></div>
+
+                <div id="hold-pending">
+                    <button id="hold-button" type="button" class="btn btn-primary btn-block btn-lg" disabled>
+                        Hold these seats
+                    </button>
+                </div>
+
+                <div id="hold-active" class="hidden text-center">
+                    <p>Seats held for you for</p>
+                    <p class="hold-timer" id="hold-timer">--:--</p>
+                    <a id="checkout-link" class="btn btn-success btn-block btn-lg" href="#">Continue to checkout</a>
+                    <button id="release-button" type="button" class="btn btn-link">Change seats</button>
+                </div>
+            </div>
+            <div class="panel-footer small text-muted">
+                Booking fee applies per seat. Weekday shows before 5pm are discounted.
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/app/seat-map.js"></script>
+    <script>
+        $(function () {
+            $('#seat-map').seatMap({
+                seatsUrl: '@Url.Action("Seats", new { id = Model.Id })',
+                holdUrl: '@Url.Action("Hold", new { id = Model.Id })',
+                releaseUrl: '@Url.Action("Release")',
+                maxSeats: @ViewBag.MaxSeats,
+                token: $('input[name="__RequestVerificationToken"]').val()
+            });
+        });
+    </script>
+}
