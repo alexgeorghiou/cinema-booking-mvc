@@ -1,0 +1,19 @@
+@model Booking
+
+<div class="e-ticket">
+    <h2 class="text-center"><span class="glyphicon glyphicon-film"></span> Lumiere Cinema</h2>
+    <h3 class="text-center">@Model.Screening.Movie.Title</h3>
+    <p class="text-center lead">
+        @Html.LocalTime(Model.Screening.StartsAtUtc, "ddd d MMM yyyy")<br />
+        Doors @Html.LocalTime(Model.Screening.StartsAtUtc.AddMinutes(-20), "HH:mm") &middot; Film @Html.LocalTime(Model.Screening.StartsAtUtc, "HH:mm")
+    </p>
+    <img class="qr" alt="Admission QR code" src="@Url.Action("Qr", new { reference = Model.Reference })" />
+    <p class="reference">@Model.Reference</p>
+    <table class="table table-condensed">
+        <tr><th>Screen</th><td>@Model.Screening.Hall.Name (@DisplayLabels.Format(Model.Screening.Format))</td></tr>
+        <tr><th>Seats</th><td>@Model.SeatLabels</td></tr>
+        <tr><th>Paid</th><td>@Html.Money(Model.Total)</td></tr>
+    </table>
+    <p class="small text-muted text-center">One scan admits the whole party. Valid for this showing only.</p>
+    <p class="text-center no-print"><button class="btn btn-default" onclick="window.print()">Print</button></p>
+</div>

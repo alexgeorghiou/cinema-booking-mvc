@@ -1,0 +1,50 @@
+@model Booking
+
+<div class="page-header">
+    <h1>
+        @if (Model.Status == BookingStatus.Cancelled)
+        {
+            <span class="label label-default">Cancelled</span>
+        }
+        else
+        {
+            <span class="glyphicon glyphicon-ok-circle text-success"></span>
+        }
+        Booking @Model.Reference
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <dl class="dl-horizontal">
+            <dt>Film</dt><dd>@Model.Screening.Movie.Title</dd>
+            <dt>When</dt><dd>@Html.LocalTime(Model.Screening.StartsAtUtc, "dddd d MMMM yyyy, HH:mm")</dd>
+            <dt>Where</dt><dd>@Model.Screening.Hall.Name</dd>
+            <dt>Seats</dt><dd>@Model.SeatLabels</dd>
+            <dt>Total</dt><dd>@Html.Money(Model.Total) <small class="text-muted">(incl. @Html.Money(Model.ServiceFee) fee)</small></dd>
+            <dt>E-ticket to</dt><dd>@Model.CustomerEmail</dd>
+        </dl>
+        @if (Model.Status != BookingStatus.Cancelled)
+        {
+            <a class="btn btn-primary" href="@Url.Action("Ticket", new { reference = Model.Reference })">
+                <span class="glyphicon glyphicon-print"></span> Open printable e-ticket
+            </a>
+        }
+        @if (ViewBag.CanCancel == true)
+        {
+            using (Html.BeginForm("Cancel", "Bookings", new { reference = Model.Reference }, FormMethod.Post, new { @class = "inline-form", style = "display:inline" }))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-link text-danger" onclick="return confirm('Cancel this booking and release the seats?');">Cancel booking</button>
+            }
+        }
+    </div>
+    <div class="col-md-5 text-center">
+        @if (Model.Status != BookingStatus.Cancelled)
+        {
+            <img class="img-thumbnail" width="220" height="220" alt="QR code for booking @Model.Reference"
+                 src="@Url.Action("Qr", new { reference = Model.Reference })" />
+            <p class="small text-muted">Show this code at the door.</p>
+        }
+    </div>
+</div>

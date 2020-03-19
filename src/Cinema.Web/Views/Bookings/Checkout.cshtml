@@ -1,0 +1,59 @@
+@model CheckoutViewModel
+@{
+    var quote = Model.Quote;
+    var screening = quote.Screening;
+}
+
+<div class="page-header">
+    <h1>Checkout <small>@screening.Movie.Title &middot; @Html.LocalTime(screening.StartsAtUtc) &middot; @screening.Hall.Name</small></h1>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <table class="table table-striped">
+            <thead><tr><th>Seat</th><th>Type</th><th class="text-right">Price</th></tr></thead>
+            <tbody>
+                @foreach (var line in quote.Lines)
+                {
+                    <tr><td>@line.Seat.Label</td><td>@line.Seat.Type</td><td class="text-right">@Html.Money(line.Price)</td></tr>
+                }
+                <tr><td colspan="2">Booking fee</td><td class="text-right">@Html.Money(quote.ServiceFee)</td></tr>
+            </tbody>
+            <tfoot><tr><th colspan="2">Total</th><th class="text-right">@Html.Money(quote.Total)</th></tr></tfoot>
+        </table>
+        <p class="text-muted">
+            Your seats are held until <strong>@Html.LocalTime(quote.ExpiresUtc, "HH:mm")</strong>.
+            Payment is taken at the box office in this demo.
+        </p>
+    </div>
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @using (Html.BeginForm("Checkout", "Bookings", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(m => m.Form.HoldId)
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Form.Email)
+                        @Html.TextBoxFor(m => m.Form.Email, new { @class = "form-control", type = "email", autocomplete = "email" })
+                        @Html.ValidationMessageFor(m => m.Form.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="checkbox">
+                        <label>@Html.CheckBoxFor(m => m.Form.AcceptTerms) I accept the booking terms</label>
+                        @Html.ValidationMessageFor(m => m.Form.AcceptTerms, "", new { @class = "text-danger" })
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg btn-block">Confirm booking</button>
+                }
+                @if (!Request.IsAuthenticated)
+                {
+                    <p class="small text-muted" style="margin-top:10px">
+                        @Html.ActionLink("Sign in", "Login", "Account", new { returnUrl = Request.RawUrl }, null)
+                        to manage or cancel this booking later.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

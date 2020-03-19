@@ -1,0 +1,29 @@
+@model IReadOnlyList<Booking>
+
+<div class="page-header"><h1>My bookings</h1></div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No bookings yet. @Html.ActionLink("See what's on", "Index", "Home").</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr><th>Reference</th><th>Film</th><th>When</th><th>Seats</th><th class="text-right">Total</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr class="@(b.Status == BookingStatus.Cancelled ? "text-muted" : "")">
+                    <td>@Html.ActionLink(b.Reference, "Confirmation", new { reference = b.Reference })</td>
+                    <td>@b.Screening.Movie.Title</td>
+                    <td>@Html.LocalTime(b.Screening.StartsAtUtc)</td>
+                    <td>@b.SeatLabels</td>
+                    <td class="text-right">@Html.Money(b.Total)</td>
+                    <td>@b.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
