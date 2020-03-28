@@ -1,0 +1,21 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var controller = (string)ViewContext.RouteData.Values["controller"];
+}
+<div class="row">
+    <div class="col-sm-3 col-md-2">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="@(controller == "Dashboard" ? "active" : "")">@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
+            <li class="@(controller == "Movies" ? "active" : "")">@Html.ActionLink("Movies", "Index", "Movies")</li>
+            <li class="@(controller == "Halls" ? "active" : "")">@Html.ActionLink("Halls", "Index", "Halls")</li>
+            <li class="@(controller == "Screenings" ? "active" : "")">@Html.ActionLink("Screenings", "Index", "Screenings")</li>
+            <li class="@(controller == "Tickets" ? "active" : "")">@Html.ActionLink("Door check-in", "Scan", "Tickets")</li>
+        </ul>
+    </div>
+    <div class="col-sm-9 col-md-10">
+        @RenderBody()
+    </div>
+</div>
+@section scripts {
+    @RenderSection("scripts", required: false)
+}

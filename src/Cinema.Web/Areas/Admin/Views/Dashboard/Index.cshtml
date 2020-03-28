@@ -1,0 +1,26 @@
+@model DashboardViewModel
+
+<h2>Next 48 hours</h2>
+<table class="table table-condensed table-hover">
+    <thead>
+        <tr><th>Start</th><th>Film</th><th>Hall</th><th style="width:30%">Occupancy</th><th class="text-right">Revenue</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.Upcoming)
+        {
+            <tr>
+                <td>@Html.LocalTime(row.Screening.StartsAtUtc)</td>
+                <td>@row.Screening.Movie.Title</td>
+                <td>@row.Screening.Hall.Name</td>
+                <td>
+                    <div class="progress" style="margin-bottom:0">
+                        <div class="progress-bar @(row.Percent > 85 ? "progress-bar-danger" : row.Percent > 50 ? "progress-bar-warning" : "")"
+                             role="progressbar" style="width:@(row.Percent)%">@row.Sold / @row.Capacity</div>
+                    </div>
+                </td>
+                <td class="text-right">@Html.Money(row.Revenue)</td>
+                <td>@Html.ActionLink("Bookings", "Bookings", "Screenings", new { id = row.Screening.Id }, null)</td>
+            </tr>
+        }
+    </tbody>
+</table>
