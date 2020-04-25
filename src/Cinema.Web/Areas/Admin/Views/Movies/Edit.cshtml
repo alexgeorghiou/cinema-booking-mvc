@@ -1,0 +1,47 @@
+@model MovieForm
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Save", "Movies", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title, new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Synopsis, new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">@Html.TextAreaFor(m => m.Synopsis, 4, 60, new { @class = "form-control" })</div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.DurationMinutes, new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.DurationMinutes, new { @class = "form-control", type = "number", min = 1, max = 300 })
+            @Html.ValidationMessageFor(m => m.DurationMinutes, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(m => m.Rating, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-4">@Html.EnumDropDownListFor(m => m.Rating, new { @class = "form-control" })</div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PosterUrl, new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.PosterUrl, new { @class = "form-control", type = "url" })
+            @Html.ValidationMessageFor(m => m.PosterUrl, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ReleaseDate, new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-4">@Html.TextBoxFor(m => m.ReleaseDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })</div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-primary">Save</button>
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-link" })
+        </div>
+    </div>
+}
