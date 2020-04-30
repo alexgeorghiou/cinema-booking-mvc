@@ -1,0 +1,18 @@
+@model IReadOnlyList<Hall>
+
+<h2>Halls <a class="btn btn-primary btn-sm pull-right" href="@Url.Action("Create")">Add hall</a></h2>
+<table class="table table-striped">
+    <thead><tr><th>Name</th><th>Seats</th><th>Premium</th><th>Wheelchair</th><th></th></tr></thead>
+    <tbody>
+        @foreach (var h in Model)
+        {
+            <tr>
+                <td>@h.Name</td>
+                <td>@h.Capacity</td>
+                <td>@h.Seats.Count(s => s.Type == SeatType.Premium)</td>
+                <td>@h.Seats.Count(s => s.Type == SeatType.Accessible)</td>
+                <td class="text-right">@Html.ActionLink("Seating plan", "Details", new { id = h.Id }, new { @class = "btn btn-default btn-xs" })</td>
+            </tr>
+        }
+    </tbody>
+</table>

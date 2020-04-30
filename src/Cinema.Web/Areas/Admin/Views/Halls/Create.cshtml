@@ -1,0 +1,23 @@
+@model HallForm
+
+<h2>Add hall</h2>
+@using (Html.BeginForm("Create", "Halls", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    foreach (var field in new[] { "Name", "Rows", "SeatsPerRow", "PremiumRows", "AccessibleSeats" })
+    {
+        <div class="form-group">
+            @Html.Label(field, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-6">
+                @Html.TextBox(field, null, new { @class = "form-control" })
+                @Html.ValidationMessage(field, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-primary">Generate seating plan</button>
+        </div>
+    </div>
+}
