@@ -1,0 +1,19 @@
+@model ScreeningBookingsViewModel
+
+<h2>@Model.Screening.Movie.Title <small>@Html.LocalTime(Model.Screening.StartsAtUtc) &middot; @Model.Screening.Hall.Name</small></h2>
+<table class="table table-condensed">
+    <thead><tr><th>Reference</th><th>Email</th><th>Seats</th><th class="text-right">Total</th><th>Status</th><th>Booked</th></tr></thead>
+    <tbody>
+        @foreach (var b in Model.Bookings)
+        {
+            <tr class="@(b.Status == BookingStatus.Cancelled ? "text-muted" : b.Status == BookingStatus.CheckedIn ? "success" : "")">
+                <td><code>@b.Reference</code></td>
+                <td>@b.CustomerEmail</td>
+                <td>@b.SeatLabels</td>
+                <td class="text-right">@Html.Money(b.Total)</td>
+                <td>@b.Status</td>
+                <td>@Html.LocalTime(b.CreatedUtc, "d MMM HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
