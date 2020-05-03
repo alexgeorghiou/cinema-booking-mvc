@@ -1,0 +1,26 @@
+@model Cinema.Core.Services.TicketCheck
+
+<h2>Door check-in</h2>
+
+@if (Model != null)
+{
+    <div class="alert @(Model.IsValid ? "alert-success" : "alert-danger") lead">
+        <strong>@DisplayLabels.Outcome(Model.Outcome)</strong>
+        @if (Model.Booking != null)
+        {
+            <br /><small>
+                @Model.Booking.Reference &middot; @Model.Booking.Screening.Movie.Title &middot;
+                @Model.Booking.Seats.Count seat(s): @Model.Booking.SeatLabels
+            </small>
+        }
+    </div>
+}
+
+@using (Html.BeginForm("Scan", "Tickets", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="input-group input-group-lg">
+        <input type="text" name="payload" class="form-control" placeholder="Scan QR code&hellip;" autofocus autocomplete="off" />
+        <span class="input-group-btn"><button class="btn btn-primary" type="submit">Check in</button></span>
+    </div>
+}
