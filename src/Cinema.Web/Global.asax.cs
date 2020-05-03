@@ -12,7 +12,7 @@ namespace Cinema.Web
         {
             MvcHandler.DisableMvcResponseHeader = true;
 
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<CinemaDbContext, Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<CinemaDbContext, Configuration>(useSuppliedContext: true));
 
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

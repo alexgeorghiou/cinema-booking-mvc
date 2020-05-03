@@ -33,7 +33,8 @@ namespace Cinema.Web
             builder.RegisterType<HallLayoutBuilder>().AsSelf().SingleInstance();
 
             // Persistence (per request)
-            builder.RegisterType<CinemaDbContext>().AsSelf().InstancePerRequest();
+            var connection = ConnectionStrings.Cinema();
+            builder.Register(c => new CinemaDbContext(connection)).AsSelf().InstancePerRequest();
             builder.RegisterType<EfUnitOfWork>().As<IUnitOfWork>().InstancePerRequest();
             builder.RegisterType<EfMovieRepository>().As<IMovieRepository>().InstancePerRequest();
             builder.RegisterType<EfHallRepository>().As<IHallRepository>().InstancePerRequest();
