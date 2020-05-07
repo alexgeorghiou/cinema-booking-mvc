@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    env:
+      CONFIGURATION: Release
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Set up NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: nuget restore Cinema.sln -ConfigFile nuget.config
+
+      - name: Build solution (MVC 5 web app + core + tests)
+        run: msbuild Cinema.sln /m /nologo /v:minimal /p:Configuration=$env:CONFIGURATION
+
+      - name: Test
+        run: dotnet test tests/Cinema.Core.Tests/Cinema.Core.Tests.csproj -c $env:CONFIGURATION --no-build --logger "trx;LogFileName=results.trx" --results-directory TestResults
+
+      - name: Publish web app
+        run: >
+          msbuild src/Cinema.Web/Cinema.Web.csproj /nologo /v:minimal
+          /p:Configuration=$env:CONFIGURATION
+          /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem
+          /p:PublishUrl=${{ github.workspace }}\publish /p:DeleteExistingFiles=true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+
+      - name: Upload site
+        uses: actions/upload-artifact@v4
+        with:
+          name: cinema-web
+          path: publish
